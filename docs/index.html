@@ -27,7 +27,7 @@
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 500px;
+            width: 600px;
             text-align: center;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
@@ -48,11 +48,31 @@
 
         .button-primary {
             background-color: #0353A4;
-            color: #0353A4;
+            color: white;
         }
 
         .dark-mode .button-primary {
             background-color: #370164;
+        }
+
+        #language-toggle {
+            background-color: #006DAA;
+            color: #ffffff;
+        }
+
+        .dark-mode #language-toggle {
+            background-color: #190034;
+            color: #B9D6F2;
+        }
+
+        #theme-toggle {
+            background-color: #003559;
+            color: #ffffff;
+        }
+
+        .dark-mode #theme-toggle {
+            background-color: #190034;
+            color: #B9D6F2;
         }
 
         .input-field, select {
@@ -106,7 +126,7 @@
         <input id="number1" class="input-field" type="number" placeholder="Número 1">
         <input id="number2" class="input-field" type="number" placeholder="Número 2">
 
-        <select id="operation" class="input-field">
+    </select id="operation" class="input-field">
             <option value="+">+</option>
             <option value="-">-</option>
             <option value="*">*</option>
