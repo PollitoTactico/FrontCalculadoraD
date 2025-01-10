@@ -3,224 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Distribuida</title>
+    <title>Calculadora</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
-            background-color: #B9D6F2;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .dark-mode {
-            background-color: #190127;
-            color: #ffffff;
+            margin: 0;
+            background-color: #f5f5f5;
         }
 
         .container {
-            background: #ffffff;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 600px;
             text-align: center;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .dark-mode .container {
-            background: #310068;
-            color: #ffffff;
+            max-width: 300px;
+            margin: auto;
         }
 
         .button {
-            padding: 10px 15px;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #006DAA;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .dark-mode .button {
+            background-color: #57078D;
+        }
+
+        #numeric-calculator {
+            display: none;
+            transition: opacity 0.3s ease;
+        }
+
+        #display {
+            height: 60px;
+            font-size: 24px;
+            background-color: #e9ecef;
+            text-align: right;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .key {
+            padding: 15px;
             margin: 5px;
+            font-size: 18px;
+            width: 60px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 14px;
-        }
-
-        .button-primary {
-            background-color: #006DAA;
-            color: white;
-        }
-
-        .dark-mode .button-primary {
-            background-color: #57078D;
-        }
-
-        #language-toggle {
             background-color: #006DAA;
             color: #ffffff;
         }
 
-        .dark-mode #language-toggle {
+        .dark-mode .key {
             background-color: #57078D;
-            color: #B9D6F2;
         }
 
-        #theme-toggle {
-            background-color: #006DAA;
-            color: #ffffff;
-        }
-
-        .dark-mode #theme-toggle {
-            background-color: #57078D;
-            color: #B9D6F2;
-        }
-
-        .input-field, select {
-            width: 80%;
-            padding: 10px;
-            margin: 10px auto;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            display: block;
-        }
-
-        .dark-mode .input-field, .dark-mode select {
-            background-color: #190034;
-            color: #ffffff;
-            border: 1px solid #310068;
-        }
-
-        #result-box {
-            width: 80%;
-            padding: 15px;
-            margin: 10px auto;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #e9ecef;
-            font-size: 18px;
-            font-weight: bold;
-            display: block;
-        }
-
-        .dark-mode #result-box {
-            background-color: #190034;
-            color: #ffffff;
-        }
-
-        h1 {
-            color: #061A40;
-        }
-
-        .dark-mode h1 {
-            color: #B9D6F2;
-        }
-
-        label {
-            position: absolute;
-            left: -9999px;
+        #keypad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <button class="button" id="language-toggle">Cambiar a Inglés</button>
-        <button class="button" id="theme-toggle">Modo Oscuro</button>
+    <div class="container" id="standard-calculator">
+        <h1>Calculadora Estándar</h1>
+        <button class="button" id="switch-to-numeric">Cambiar a Calculadora Numérica</button>
+        <!-- Aquí irían los controles de la calculadora estándar si existen -->
+    </div>
 
-        <h1 id="title">Calculadora Distribuida</h1>
-
-        <input id="number1" class="input-field" type="number" placeholder="Número 1">
-        <input id="number2" class="input-field" type="number" placeholder="Número 2">
-
-        <label for="operation">Operación:</label>
-            <select id="operation" class="input-field">
-                <option value="+">+</option>
-                <option value="-">-</option>
-                <option value="*">*</option>
-                <option value="/">/</option>
-            </select>
-
-        <button class="button button-primary" id="calculate">Calcular</button>
-
-        <div id="result-box">Resultado</div>
+    <div class="container" id="numeric-calculator">
+        <button class="button" id="back-to-standard">Volver a Calculadora Estándar</button>
+        <h1>Calculadora Numérica</h1>
+        <div id="display" contenteditable="true">0</div>
+        <div id="keypad">
+            <button class="key">7</button>
+            <button class="key">8</button>
+            <button class="key">9</button>
+            <button class="key operation">/</button>
+            <button class="key">4</button>
+            <button class="key">5</button>
+            <button class="key">6</button>
+            <button class="key operation">*</button>
+            <button class="key">1</button>
+            <button class="key">2</button>
+            <button class="key">3</button>
+            <button class="key operation">-</button>
+            <button class="key">0</button>
+            <button class="key">.</button>
+            <button class="key operation">+</button>
+            <button class="key operation" id="equals">=</button>
+        </div>
     </div>
 
     <script>
-        const translations = {
-            en: {
-                languageButton: "Switch to Spanish",
-                title: "Distributed Calculator",
-                result: "Result",
-                calculate: "Calculate",
-                placeholder1: "Number 1",
-                placeholder2: "Number 2"
-            },
-            es: {
-                languageButton: "Cambiar a Inglés",
-                title: "Calculadora Distribuida",
-                result: "Resultado",
-                calculate: "Calcular",
-                placeholder1: "Número 1",
-                placeholder2: "Número 2"
-            },
-        };
+        const apiUrl = "https://backendcalculadorad-production.up.railway.app/api/calculate"; // URL del backend
 
-        let currentLanguage = "es";
-        let isDarkMode = false;
+        // Alternar entre las calculadoras
+        document.getElementById("switch-to-numeric").addEventListener("click", () => {
+            document.getElementById("standard-calculator").style.display = "none";
+            document.getElementById("numeric-calculator").style.display = "block";
+        });
 
-        document.getElementById("language-toggle").addEventListener("click", toggleLanguage);
-        document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
-        document.getElementById("calculate").addEventListener("click", calculate);
+        document.getElementById("back-to-standard").addEventListener("click", () => {
+            document.getElementById("numeric-calculator").style.display = "none";
+            document.getElementById("standard-calculator").style.display = "block";
+        });
 
-        function toggleLanguage() {
-            currentLanguage = currentLanguage === "es" ? "en" : "es";
-            updateTranslations();
-        }
+        const display = document.getElementById("display");
+        const keys = document.querySelectorAll(".key");
 
-        function toggleTheme() {
-            isDarkMode = !isDarkMode;
-            document.body.classList.toggle("dark-mode", isDarkMode);
-        }
+        keys.forEach((key) => {
+            key.addEventListener("click", () => {
+                const value = key.textContent;
 
-        function updateTranslations() {
-            const lang = translations[currentLanguage];
-            document.getElementById("language-toggle").textContent = lang.languageButton;
-            document.getElementById("title").textContent = lang.title;
-            document.getElementById("result-box").textContent = lang.result;
-            document.getElementById("calculate").textContent = lang.calculate;
-            document.getElementById("number1").placeholder = lang.placeholder1;
-            document.getElementById("number2").placeholder = lang.placeholder2;
-        }
-
-        function calculate() {
-            const num1 = parseFloat(document.getElementById("number1").value);
-            const num2 = parseFloat(document.getElementById("number2").value);
-            const operation = document.getElementById("operation").value;
-
-            let result;
-            if (isNaN(num1) || isNaN(num2)) {
-                result = currentLanguage === "es" ? "Por favor ingresa números válidos" : "Please enter valid numbers";
-            } else {
-                switch (operation) {
-                    case "+":
-                        result = num1 + num2;
-                        break;
-                    case "-":
-                        result = num1 - num2;
-                        break;
-                    case "*":
-                        result = num1 * num2;
-                        break;
-                    case "/":
-                        result = num2 !== 0 ? num1 / num2 : (currentLanguage === "es" ? "División por cero no permitida" : "Division by zero not allowed");
-                        break;
+                if (value === "=") {
+                    calculateBackend(display.textContent);
+                } else if (display.textContent === "0" && value !== ".") {
+                    display.textContent = value;
+                } else {
+                    display.textContent += value;
                 }
-            }
-            document.getElementById("result-box").textContent = result;
-        }
+            });
+        });
 
-        // Iniciar traducciones
-        updateTranslations();
+        // Función para calcular usando el backend
+        function calculateBackend(expression) {
+            fetch(apiUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ expression }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.result !== undefined) {
+                        display.textContent = data.result;
+                    } else {    
+                        display.textContent = "Error";
+                    }
+                })
+                .catch(() => {
+                    display.textContent = "Error";
+                });
+        }
     </script>
 </body>
 </html>
+
 
