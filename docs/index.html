@@ -38,10 +38,10 @@
             const operacion = document.getElementById('operacion').value;
 
             try {
-                const response = await fetch('https://mi-backend.railway.app/api/calcular?a=1&b=2&operacion=suma/api/calcular', {
+                const response = await fetch('https://mi-backend.railway.app/api/calcular', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ num1, num2, operacion })
+                    body: JSON.stringify({ a: num1, b: num2, operacion }) // Cambia los nombres al formato esperado por el backend
                 });
 
                 const data = await response.json();
@@ -49,7 +49,7 @@
                 if (response.ok) {
                     resultado.textContent = `Resultado: ${data.resultado}`;
                 } else {
-                    resultado.textContent = `Error: ${data.error}`;
+                    resultado.textContent = `Error: ${data.error || 'Operación no válida'}`;
                 }
             } catch (error) {
                 resultado.textContent = 'Error de conexión con el servidor.';
