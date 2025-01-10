@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora Distribuida</title>
     <style>
+        .hidden {
+            display: none;
+        }
+
+        .visible {
+            display: block;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -119,14 +127,36 @@
             position: absolute;
             left: -9999px;
         }
+
+        #switch-to-manual {
+            background-color: #006DAA; 
+            color: #ffffff; 
+        }
+
+        .dark-mode #switch-to-manual {
+            background-color: #57078D; 
+            color: #B9D6F2; 
+        }
+
+        #switch-to-numeric {
+            background-color: #006DAA; 
+            color: #ffffff; 
+        }
+
+        .dark-mode #switch-to-numeric {
+            background-color: #57078D;
+            color: #B9D6F2; 
+        }
+
+    
     </style>
 </head>
 <body>
     <!-- Contenedor para la calculadora manual -->
-    <div class="container" id="manual-calculator">
+    <div class="container" id="manual-calculator" class="visible">
         <button class="button" id="language-toggle">Cambiar a Inglés</button>
         <button class="button" id="theme-toggle">Modo Oscuro</button>
-        <button class="button" id="switch-to-numeric">Cambiar a Calculadora Numérica</button>
+        <button class="button" id="switch-to-numeric">Calculadora Numérica</button>
 
         <h1 id="title">Calculadora Distribuida</h1>
 
@@ -146,8 +176,8 @@
     </div>
 
     <!-- Contenedor para la calculadora numérica -->
-    <div class="container" id="numeric-calculator">
-        <button class="button" id="switch-to-manual">Cambiar a Calculadora Manual</button>
+    <div class="container" id="numeric-calculator" class="hidden">
+        <button class="button" id="switch-to-manual">Calculadora Manual</button>
         <div id="numeric-display" class="input-field">0</div>
         <div>
             <button class="button numeric-button">7</button>
@@ -179,6 +209,7 @@
         const resultBox = document.getElementById('result-box');
         const manualCalculator = document.getElementById('manual-calculator');
         const numericCalculator = document.getElementById('numeric-calculator');
+        const toggleButton = document.getElementById('toggle-calculator');
         const switchToNumericButton = document.getElementById('switch-to-numeric');
         const switchToManualButton = document.getElementById('switch-to-manual');
         const numericDisplay = document.getElementById('numeric-display');
@@ -186,6 +217,10 @@
         const operationButtons = document.querySelectorAll('.operation-button');
         const clearButton = document.getElementById('clear');
         const numericCalculateButton = document.getElementById('numeric-calculate');
+        manualCalculator.classList.add('visible');
+        manualCalculator.classList.remove('hidden');
+        numericCalculator.classList.add('hidden');
+        numericCalculator.classList.remove('visible');
 
         let numericExpression = '';
 
@@ -220,6 +255,9 @@
         const translations = {
             en: {
                 languageButton: "Switch to Spanish",
+                toggleTheme: "Dark Mode",
+                switchToManualButton: "Manual Calculator",
+                switchToNumericButton: "Numeric Calculator",
                 title: "Distributed Calculator",
                 result: "Result",
                 calculate: "Calculate",
@@ -228,6 +266,9 @@
             },
             es: {
                 languageButton: "Cambiar a Inglés",
+                toggleTheme: "Modo Oscuro",
+                switchToManualButton: "Calculadora Manual",
+                switchToNumericButton: "Calculadora Numérica",
                 title: "Calculadora Distribuida",
                 result: "Resultado",
                 calculate: "Calcular",
@@ -241,6 +282,11 @@
 
         document.getElementById("language-toggle").addEventListener("click", toggleLanguage);
         document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
+        document.getElementById('switch-to-manual').addEventListener('click', function() {
+        document.getElementById('manual-calculator').style.display = 'block';
+        document.getElementById('numeric-calculator').style.display = 'none';
+        });
+
         
         function toggleLanguage() {
             currentLanguage = currentLanguage === "es" ? "en" : "es";
@@ -255,11 +301,16 @@
         function updateTranslations() {
             const lang = translations[currentLanguage];
             document.getElementById("language-toggle").textContent = lang.languageButton;
+            document.getElementById("theme-toggle").textContent = lang.toggleTheme;
             document.getElementById("title").textContent = lang.title;
+            document.getElementById("switch-to-manual").textContent = lang.switchToManualButton;
+            document.getElementById("switch-to-numeric").textContent = lang.switchToNumericButton;
             document.getElementById("result-box").textContent = lang.result;
             document.getElementById("calculate").textContent = lang.calculate;
             document.getElementById("number1").placeholder = lang.placeholder1;
             document.getElementById("number2").placeholder = lang.placeholder2;
+            document.getElementById("theme-toggle").textContent = lang.toggleTheme;
+
         } 
 
         // Cambiar a la calculadora numérica
@@ -315,10 +366,32 @@
             }
         });
 
+        // Alternar entre calculadoras
+        toggleButton.addEventListener('click', () => {
+            if (manualCalculator.classList.contains('visible')) {
+                manualCalculator.classList.remove('visible');
+                manualCalculator.classList.add('hidden');
+                numericCalculator.classList.remove('hidden');
+                numericCalculator.classList.add('visible');
+            } else {
+                manualCalculator.classList.remove('hidden');
+                manualCalculator.classList.add('visible');
+                numericCalculator.classList.remove('visible');
+                numericCalculator.classList.add('hidden');
+            }
+        });
+
         function updateNumericDisplay() {
             numericDisplay.textContent = numericExpression || '0';
         }
-        
+         
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            manualCalculator.classList.toggle('dark-mode');
+            numericCalculator.classList.toggle('dark-mode');
+        }
+
         // Iniciar traducciones
         updateTranslations();
 
