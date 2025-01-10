@@ -122,9 +122,11 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Contenedor para la calculadora manual -->
+    <div class="container" id="manual-calculator">
         <button class="button" id="language-toggle">Cambiar a Inglés</button>
         <button class="button" id="theme-toggle">Modo Oscuro</button>
+        <button class="button" id="switch-to-numeric">Cambiar a Calculadora Numérica</button>
 
         <h1 id="title">Calculadora Distribuida</h1>
 
@@ -143,8 +145,49 @@
         <div id="result-box">Resultado</div>
     </div>
 
+    <!-- Contenedor para la calculadora numérica -->
+    <div class="container" id="numeric-calculator">
+        <button class="button" id="switch-to-manual">Cambiar a Calculadora Manual</button>
+        <div id="numeric-display" class="input-field">0</div>
+        <div>
+            <button class="button numeric-button">7</button>
+            <button class="button numeric-button">8</button>
+            <button class="button numeric-button">9</button>
+            <button class="button operation-button">/</button>
+        </div>
+        <div>
+            <button class="button numeric-button">4</button>
+            <button class="button numeric-button">5</button>
+            <button class="button numeric-button">6</button>
+            <button class="button operation-button">*</button>
+        </div>
+        <div>
+            <button class="button numeric-button">1</button>
+            <button class="button numeric-button">2</button>
+            <button class="button numeric-button">3</button>
+            <button class="button operation-button">-</button>
+        </div>
+        <div>
+            <button class="button numeric-button">0</button>
+            <button id="clear" class="button">C</button>
+            <button id="numeric-calculate" class="button button-primary">=</button>
+            <button class="button operation-button">+</button>
+        </div>
+    </div>
+
     <script>
         const resultBox = document.getElementById('result-box');
+        const manualCalculator = document.getElementById('manual-calculator');
+        const numericCalculator = document.getElementById('numeric-calculator');
+        const switchToNumericButton = document.getElementById('switch-to-numeric');
+        const switchToManualButton = document.getElementById('switch-to-manual');
+        const numericDisplay = document.getElementById('numeric-display');
+        const numericButtons = document.querySelectorAll('.numeric-button');
+        const operationButtons = document.querySelectorAll('.operation-button');
+        const clearButton = document.getElementById('clear');
+        const numericCalculateButton = document.getElementById('numeric-calculate');
+
+        let numericExpression = '';
 
         document.getElementById('calculate').addEventListener('click', async () => {
             const num1 = parseFloat(document.getElementById('number1').value);
@@ -217,7 +260,65 @@
             document.getElementById("calculate").textContent = lang.calculate;
             document.getElementById("number1").placeholder = lang.placeholder1;
             document.getElementById("number2").placeholder = lang.placeholder2;
-        }    
+        } 
+
+        // Cambiar a la calculadora numérica
+        switchToNumericButton.addEventListener('click', () => {
+            manualCalculator.style.display = 'none';
+            numericCalculator.style.display = 'block';
+        });
+
+        // Cambiar a la calculadora manual
+        switchToManualButton.addEventListener('click', () => {
+            numericCalculator.style.display = 'none';
+            manualCalculator.style.display = 'block';
+        });
+
+         // Manejo de entrada numérica
+         numericButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                numericExpression += button.textContent;
+                updateNumericDisplay();
+            });
+        });
+
+        // Manejo de operadores
+        operationButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const operator = button.textContent;
+                if (numericExpression.slice(-1).match(/[+\-*/]/)) {
+                    // Si ya hay un operador al final, lo reemplaza
+                    numericExpression = numericExpression.slice(0, -1) + operator;
+                } else {
+                    numericExpression += operator;
+                }
+                updateNumericDisplay();
+            });
+        });
+
+        // Borrar expresión
+        clearButton.addEventListener('click', () => {
+            numericExpression = '';
+            updateNumericDisplay();
+        });
+
+        // Calcular resultado en la calculadora numérica
+        numericCalculateButton.addEventListener('click', () => {
+            try {
+                const result = eval(numericExpression);
+                numericExpression = result.toString();
+                updateNumericDisplay();
+            } catch (error) {
+                numericExpression = 'Error';
+                updateNumericDisplay();
+                numericExpression = ''; // Restablece después de mostrar error
+            }
+        });
+
+        function updateNumericDisplay() {
+            numericDisplay.textContent = numericExpression || '0';
+        }
+        
         // Iniciar traducciones
         updateTranslations();
 
