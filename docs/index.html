@@ -3,60 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora</title>
+    <title>Calculadora Distribuida</title>
+    <style>
+        :root {
+            --background-light: #eaf9ff;
+            --background-dark: #1e1e2f;
+            --text-light: #000;
+            --text-dark: #fff;
+            --button-light: #007bff;
+            --button-dark: #444;
+            --input-light: #d6f0ff;
+            --input-dark: #001f3f;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--background-light);
+            color: var(--text-light);
+            transition: all 0.3s;
+        }
+
+        .container {
+            background: var(--background-light);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .container.dark {
+            background: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        button {
+            background-color: var(--button-light);
+            border: none;
+            color: white;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: darkblue;
+        }
+
+        button.dark {
+            background-color: var(--button-dark);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background: var(--input-light);
+            color: var(--text-light);
+        }
+
+        .dark input, .dark select {
+            background: var(--input-dark);
+            color: var(--text-dark);
+        }
+
+        #resultado {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Calculadora</h1>
-    <form id="calculadora-form">
-        <label for="num1">Número 1:</label>
-        <input type="number" id="num1" required><br><br>
+    <div class="container" id="app">
+        <button id="cambiarIdioma">Cambiar Idioma</button>
+        <button id="toggleModo">Modo Oscuro</button>
 
-        <label for="num2">Número 2:</label>
-        <input type="number" id="num2" required><br><br>
+        <h1>Calculadora Distribuida</h1>
 
-        <label for="operacion">Operación:</label>
-        <select id="operacion" required>
-            <option value="suma">Suma</option>
-            <option value="resta">Resta</option>
-            <option value="multiplicacion">Multiplicación</option>
-            <option value="division">División</option>
-        </select><br><br>
+        <div id="resultado">0</div>
 
-        <button type="submit">Calcular</button>
-    </form>
-    <p id="resultado"></p>
+        <label for="numero1">Número 1</label>
+        <input type="number" id="numero1" placeholder="Ingresa el primer número">
+
+        <label for="numero2">Número 2</label>
+        <input type="number" id="numero2" placeholder="Ingresa el segundo número">
+
+        <label for="operador">Operación</label>
+        <select id="operador">
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+        </select>
+
+        <button id="calcular">Calcular</button>
+    </div>
+
     <script>
-        const form = document.getElementById('calculadora-form');
+        const app = document.getElementById('app');
         const resultado = document.getElementById('resultado');
-    
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-    
-            const num1 = parseFloat(document.getElementById('num1').value);
-            const num2 = parseFloat(document.getElementById('num2').value);
-            const operacion = document.getElementById('operacion').value;
-    
-            try {
-                const response = await fetch('https://backendcalculadorad-production.up.railway.app/api/calcular', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ num1, num2, operacion }) // Enviar como JSON
-                });
-    
-                const data = await response.json();
-    
-                if (response.ok) {
-                    resultado.textContent = `Resultado: ${data.resultado}`;
-                } else {
-                    resultado.textContent = `Error: ${data.error}`;
+        const numero1 = document.getElementById('numero1');
+        const numero2 = document.getElementById('numero2');
+        const operador = document.getElementById('operador');
+        const calcular = document.getElementById('calcular');
+        const toggleModo = document.getElementById('toggleModo');
+
+        let modoOscuro = false;
+
+        calcular.addEventListener('click', () => {
+            const num1 = parseFloat(numero1.value);
+            const num2 = parseFloat(numero2.value);
+            const op = operador.value;
+            let res = 0;
+
+            if (!isNaN(num1) && !isNaN(num2)) {
+                switch (op) {
+                    case '+':
+                        res = num1 + num2;
+                        break;
+                    case '-':
+                        res = num1 - num2;
+                        break;
+                    case '*':
+                        res = num1 * num2;
+                        break;
+                    case '/':
+                        res = num2 !== 0 ? num1 / num2 : 'Error';
+                        break;
                 }
-            } catch (error) {
-                resultado.textContent = 'Error de conexión con el servidor.';
+            } else {
+                res = 'Error';
+            }
+
+            resultado.textContent = res;
+        });
+
+        toggleModo.addEventListener('click', () => {
+            modoOscuro = !modoOscuro;
+            if (modoOscuro) {
+                app.classList.add('dark');
+                toggleModo.textContent = 'Modo Claro';
+            } else {
+                app.classList.remove('dark');
+                toggleModo.textContent = 'Modo Oscuro';
             }
         });
     </script>
-    
-
-
 </body>
 </html>
