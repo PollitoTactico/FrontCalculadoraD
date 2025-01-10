@@ -47,12 +47,12 @@
         }
 
         .button-primary {
-            background-color: #0353A4;
+            background-color: #006DAA;
             color: white;
         }
 
         .dark-mode .button-primary {
-            background-color: #370164;
+            background-color: #57078D;
         }
 
         #language-toggle {
@@ -61,17 +61,17 @@
         }
 
         .dark-mode #language-toggle {
-            background-color: #190034;
+            background-color: #57078D;
             color: #B9D6F2;
         }
 
         #theme-toggle {
-            background-color: #003559;
+            background-color: #006DAA;
             color: #ffffff;
         }
 
         .dark-mode #theme-toggle {
-            background-color: #190034;
+            background-color: #57078D;
             color: #B9D6F2;
         }
 
@@ -114,6 +114,11 @@
         .dark-mode h1 {
             color: #B9D6F2;
         }
+
+        label {
+            position: absolute;
+            left: -9999px;
+        }
     </style>
 </head>
 <body>
@@ -126,12 +131,13 @@
         <input id="number1" class="input-field" type="number" placeholder="Número 1">
         <input id="number2" class="input-field" type="number" placeholder="Número 2">
 
-    </select id="operation" class="input-field">
-            <option value="+">+</option>
-            <option value="-">-</option>
-            <option value="*">*</option>
-            <option value="/">/</option>
-        </select>
+        <label for="operation">Operación:</label>
+            <select id="operation" class="input-field">
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">*</option>
+                <option value="/">/</option>
+            </select>
 
         <button class="button button-primary" id="calculate">Calcular</button>
 
@@ -212,8 +218,9 @@
             document.getElementById("result-box").textContent = result;
         }
 
-        // Initialize translations
+        // Iniciar traducciones
         updateTranslations();
     </script>
 </body>
 </html>
+
